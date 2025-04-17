@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 opencv-python = "*"
+pillow = "*"
+numpy = "*"
+jupyter = "*"
+matplotlib = "*"
 
 [dev-packages]
 
