@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# segment anything checkpoint
+/models/sam_vit_h_4b8939.pth
+
 # C extensions
 *.so
 
