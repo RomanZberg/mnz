@@ -10,6 +10,8 @@ matplotlib = "*"
 torch = "*"
 torchvision = "*"
 numpy = "*"
+svgwrite = "*"
+shapely = "*"
 
 [dev-packages]
 
