@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 opencv-python = "*"
-pillow = "*"
 matplotlib = "*"
+pillow = "<=9.5.0"
 
 [dev-packages]
 
