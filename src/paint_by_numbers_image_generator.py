@@ -29,7 +29,7 @@ class PaintByNumbersImageGenerator:
 
         labeled_regions = segmentation_result.quantized_image
         labeled_regions = self._detect_regions_by_color(labeled_regions)
-        labeled_regions = self._filter_small_regions(labeled_regions, min_size=350)  # tweak size
+        labeled_regions = self._filter_small_regions(labeled_regions, min_size=150)  # tweak size
 
         color_to_number = self._assign_numbers(segmentation_result.colors)
 
