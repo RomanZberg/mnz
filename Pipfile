@@ -9,6 +9,7 @@ pillow = "*"
 matplotlib = "*"
 torch = "*"
 torchvision = "*"
+numpy = "*"
 
 [dev-packages]
 
