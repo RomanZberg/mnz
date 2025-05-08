@@ -7,6 +7,11 @@ name = "pypi"
 opencv-python = "*"
 matplotlib = "*"
 pillow = "<=9.5.0"
+torch = "*"
+torchvision = "*"
+numpy = "*"
+svgwrite = "*"
+shapely = "*"
 
 [dev-packages]
 

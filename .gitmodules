@@ -1,0 +1,6 @@
+[submodule "external/yolov5"]
+	path = external/yolov5
+	url = https://github.com/ultralytics/yolov5
+[submodule "external/segment-anything"]
+	path = external/segment-anything
+	url = https://github.com/facebookresearch/segment-anything.git
