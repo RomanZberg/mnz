@@ -34,7 +34,9 @@ class PaintByNumbersImageGenerator:
         color_to_number = self._assign_numbers(segmentation_result.colors)
 
         boundaries = skimage.segmentation.find_boundaries(
-            labeled_regions, mode='outer'
+            labeled_regions,
+            mode='outer'
+            #mode = 'subpixel'
         )
 
         boundaries = ~boundaries
@@ -54,7 +56,7 @@ class PaintByNumbersImageGenerator:
 
         to_draw_image.save(f'{output_folder}/paint.jpg')
 
-        fig, ax =get_color_pallete(color_to_number)
+        fig, ax = get_color_pallete(color_to_number)
         fig.savefig(f'{output_folder}/pallete.jpg')
 
         # Save legend
