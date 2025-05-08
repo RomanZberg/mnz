@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from src.sections import RegionDetector
 from src.segmentation import ImageSegmenter
-from src.utility import load_image
+from src.utility import load_image, get_color_pallete
 
 
 class PaintByNumbersImageGenerator:
@@ -27,16 +27,14 @@ class PaintByNumbersImageGenerator:
 
         segmentation_result = self._image_segmenter.segment(image_array)
 
-        # quantized_image, label_image, cluster_centers = self._quantize_colors(image_array, n_colors)
-
         labeled_regions = segmentation_result.quantized_image
         labeled_regions = self._detect_regions_by_color(labeled_regions)
-        labeled_regions = self._filter_small_regions(labeled_regions, min_size=150)  # tweak size
+        labeled_regions = self._filter_small_regions(labeled_regions, min_size=350)  # tweak size
 
         color_to_number = self._assign_numbers(segmentation_result.colors)
 
         boundaries = skimage.segmentation.find_boundaries(
-            segmentation_result.segment_labels, mode='outer'
+            labeled_regions, mode='outer'
         )
 
         boundaries = ~boundaries
@@ -55,6 +53,9 @@ class PaintByNumbersImageGenerator:
         print(f"Paint-by-numbers image saved to {output_image_path}")
 
         to_draw_image.save(f'{output_folder}/paint.jpg')
+
+        fig, ax =get_color_pallete(color_to_number)
+        fig.savefig(f'{output_folder}/pallete.jpg')
 
         # Save legend
         self._save_legend(color_to_number, output_folder)
@@ -82,8 +83,8 @@ class PaintByNumbersImageGenerator:
 
         font_width, font_height = font_size
 
-        font_width = font_width + (padding * 2)
-        font_height = font_height + (padding * 2)
+        font_width = font_width
+        font_height = font_height
 
         def outside_image(index):
             index_y, index_x = index
@@ -101,12 +102,15 @@ class PaintByNumbersImageGenerator:
             for middle_pixel in region.get_region_center_middle_positions():
                 current_x, current_y = middle_pixel
 
+                center_index = current_y, current_x
+
                 high_x_index = current_y, (current_x + int(font_width / 2))
                 low_x_index = current_y, (current_x - int(font_width / 2))
                 high_y_index = (current_y + int(font_height / 2)), current_x
                 low_y_index = (current_y - int(font_height / 2)), current_x
 
                 if (
+                        outside_image(center_index) or
                         (outside_image(high_x_index)) or
                         (outside_image(low_x_index)) or
                         (outside_image(high_y_index)) or
@@ -115,6 +119,7 @@ class PaintByNumbersImageGenerator:
                     continue
 
                 if (
+                        (mask[center_index] == True) and
                         (mask[high_x_index] == True) and
                         (mask[low_x_index] == True) and
                         (mask[high_y_index] == True) and
@@ -128,6 +133,7 @@ class PaintByNumbersImageGenerator:
 
     def _filter_small_regions(self, labeled_image, min_size=100):
         new_labeled = np.zeros_like(labeled_image)
+
         current_label = 1
         for region in regionprops(labeled_image):
             if region.area >= min_size:
